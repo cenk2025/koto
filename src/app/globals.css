@@ -54,7 +54,6 @@ h5,
 h6 {
   font-weight: 700;
   line-height: 1.2;
-  color: var(--gray-900);
 }
 
 h1 {
@@ -70,7 +69,6 @@ h3 {
 }
 
 p {
-  color: var(--gray-600);
   line-height: 1.7;
 }
 

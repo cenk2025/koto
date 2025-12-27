@@ -44,14 +44,14 @@ export default function ServicesPage() {
                                 <Sparkles className="w-4 h-4" />
                                 {language === 'fi' ? 'Palvelut' : 'Services'}
                             </div>
-                            <h1 className="mb-4">
+                            <h1 className="mb-4 text-center">
                                 {language === 'fi' ? (
                                     <>Löydä <span className="text-gradient">paikalliset palvelut</span></>
                                 ) : (
                                     <>Find <span className="text-gradient">local services</span></>
                                 )}
                             </h1>
-                            <p className="text-xl text-gray-600">
+                            <p className="text-xl text-gray-600 text-center">
                                 {language === 'fi'
                                     ? 'Kattava hakemisto maahanmuuttajien palveluista kaupungeittain'
                                     : 'Comprehensive directory of immigrant services by city'}
@@ -64,7 +64,7 @@ export default function ServicesPage() {
                 <section className="section">
                     <div className="container">
                         {/* Filters */}
-                        <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-10 shadow-sm">
+                        <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-10 shadow-sm max-w-4xl mx-auto">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* City Filter */}
                                 <div>
@@ -143,7 +143,7 @@ export default function ServicesPage() {
                         </div>
 
                         {/* Results Count */}
-                        <p className="text-gray-500 mb-8">
+                        <p className="text-gray-500 mb-8 text-center">
                             {language === 'fi'
                                 ? `Näytetään ${filteredServices.length} palvelua`
                                 : `Showing ${filteredServices.length} services`}
@@ -151,7 +151,7 @@ export default function ServicesPage() {
 
                         {/* Services Grid */}
                         {filteredServices.length > 0 ? (
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
                                 {filteredServices.map((service) => (
                                     <div key={service.id} className="card">
                                         {/* Header */}
@@ -210,7 +210,7 @@ export default function ServicesPage() {
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-16 bg-gray-50 rounded-2xl">
+                            <div className="text-center py-16 bg-gray-50 rounded-2xl max-w-2xl mx-auto">
                                 <p className="text-gray-500 text-lg mb-6">
                                     {language === 'fi'
                                         ? 'Emme löytäneet hakuehtojasi vastaavia palveluita.'

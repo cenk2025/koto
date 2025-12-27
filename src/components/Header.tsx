@@ -21,7 +21,7 @@ export default function Header() {
             <div className="container">
                 <div className="flex items-center justify-between h-20">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-3">
+                    <Link href="/" className="flex items-center gap-3 flex-shrink-0">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center">
                             <span className="text-white font-bold text-lg">FG</span>
                         </div>
@@ -31,21 +31,23 @@ export default function Header() {
                         </div>
                     </Link>
 
-                    {/* Desktop Navigation */}
-                    <nav className="hidden lg:flex items-center gap-1">
-                        {navigation.map((item) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className="px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-full transition-colors"
-                            >
-                                {item.name}
-                            </Link>
-                        ))}
+                    {/* Desktop Navigation - Centered */}
+                    <nav className="hidden lg:flex items-center justify-center flex-1 mx-8">
+                        <div className="flex items-center gap-2 bg-gray-100 rounded-full p-1.5">
+                            {navigation.map((item) => (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className="px-5 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-white rounded-full transition-all shadow-none hover:shadow-sm"
+                                >
+                                    {item.name}
+                                </Link>
+                            ))}
+                        </div>
                     </nav>
 
                     {/* Right Side */}
-                    <div className="hidden lg:flex items-center gap-4">
+                    <div className="hidden lg:flex items-center gap-4 flex-shrink-0">
                         {/* Language Switcher */}
                         <div className="flex items-center bg-gray-100 rounded-full p-1">
                             <button
@@ -68,7 +70,7 @@ export default function Header() {
                             </button>
                         </div>
 
-                        <Link href="/auth/login" className="btn-ghost">
+                        <Link href="/auth/login" className="px-5 py-2.5 text-sm font-medium text-gray-600 hover:text-gray-900 border border-gray-200 rounded-full hover:border-gray-300 transition-all">
                             {t('nav.login')}
                         </Link>
                         <Link href="/auth/register" className="btn-primary">

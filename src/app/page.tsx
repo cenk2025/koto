@@ -70,7 +70,7 @@ export default function Home() {
               </div>
 
               {/* Headline */}
-              <h1 className="mb-6">
+              <h1 className="mb-6 text-center">
                 {language === 'fi' ? (
                   <>Kaikki mitä tarvitset <span className="text-gradient">uuden elämän</span> aloittamiseen</>
                 ) : (
@@ -79,7 +79,7 @@ export default function Home() {
               </h1>
 
               {/* Subtitle */}
-              <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
+              <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto text-center">
                 {t('home.hero.subtitle')}
               </p>
 
@@ -115,10 +115,10 @@ export default function Home() {
         <section className="section">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="mb-4">
+              <h2 className="mb-4 text-center">
                 {language === 'fi' ? 'Mitä tarjoamme' : 'What We Offer'}
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+              <p className="text-gray-600 max-w-2xl mx-auto text-lg text-center">
                 {language === 'fi'
                   ? 'Kattavat työkalut ja resurssit onnistuneeseen kotoutumiseen Suomessa'
                   : 'Comprehensive tools and resources for successful integration in Finland'}
@@ -131,10 +131,10 @@ export default function Home() {
                   <div className={`icon-box ${feature.iconBg}`}>
                     <span className="text-2xl">{feature.icon}</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors text-center">
                     {feature.title}
                   </h3>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600 text-center">
                     {feature.description}
                   </p>
                 </Link>
@@ -143,46 +143,51 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Benefits Section */}
+        {/* Benefits Section - Full Width CTA */}
         <section className="section section-gray">
           <div className="container">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="mb-6">
+            <div className="max-w-5xl mx-auto">
+              {/* Section Header - Centered */}
+              <div className="text-center mb-12">
+                <h2 className="mb-4">
                   {language === 'fi' ? (
                     <>Miksi valita <span className="text-gradient">Finland Guide</span>?</>
                   ) : (
                     <>Why choose <span className="text-gradient">Finland Guide</span>?</>
                   )}
                 </h2>
-                <p className="text-gray-600 text-lg mb-8">
+                <p className="text-gray-600 text-lg max-w-2xl mx-auto">
                   {language === 'fi'
                     ? 'Olemme luoneet kattavan alustan, joka auttaa sinua kaikissa kotoutumisen vaiheissa.'
                     : 'We have created a comprehensive platform that helps you in all stages of integration.'}
                 </p>
-                <ul className="space-y-4">
-                  {benefits.map((benefit, index) => (
-                    <li key={index} className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                        <CheckCircle className="w-4 h-4 text-green-600" />
-                      </div>
-                      <span className="text-gray-700 font-medium">{benefit}</span>
-                    </li>
-                  ))}
-                </ul>
               </div>
-              <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-3xl p-10 text-white">
-                <h3 className="text-2xl font-bold mb-4">
+
+              {/* Benefits Grid - Centered */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto mb-12">
+                {benefits.map((benefit, index) => (
+                  <div key={index} className="flex items-center gap-3 bg-white p-4 rounded-xl border border-gray-100">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <CheckCircle className="w-5 h-5 text-green-600" />
+                    </div>
+                    <span className="text-gray-700 font-medium">{benefit}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* CTA Box - Full Width, Proper Contrast */}
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-3xl p-10 md:p-12 text-center">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4" style={{ color: 'white' }}>
                   {language === 'fi' ? 'Aloita ilmaiseksi' : 'Start for Free'}
                 </h3>
-                <p className="text-blue-100 mb-6">
+                <p className="mb-8 text-lg max-w-xl mx-auto" style={{ color: '#bfdbfe' }}>
                   {language === 'fi'
                     ? 'Rekisteröidy ja saat pääsyn kaikkiin oppaisiin, CV-työkaluun ja palveluhakemistoon.'
                     : 'Register and get access to all guides, CV tool, and service directory.'}
                 </p>
-                <Link href="/auth/register" className="inline-flex items-center bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors">
+                <Link href="/auth/register" className="inline-flex items-center bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-blue-50 transition-colors shadow-lg">
                   {t('nav.register')}
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </div>
             </div>
@@ -193,10 +198,10 @@ export default function Home() {
         <section className="section section-dark">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <h2 className="mb-4">
+              <h2 className="mb-4 text-center">
                 {language === 'fi' ? 'Aloita matkasi tänään' : 'Start Your Journey Today'}
               </h2>
-              <p className="text-lg text-slate-400 mb-8">
+              <p className="text-lg text-slate-400 mb-8 text-center">
                 {language === 'fi'
                   ? 'Liity tuhansiin maahanmuuttajiin, jotka ovat löytäneet tiensä Suomessa.'
                   : 'Join thousands of immigrants who found their way in Finland.'}

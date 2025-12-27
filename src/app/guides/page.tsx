@@ -60,14 +60,14 @@ export default function GuidesPage() {
                                 <Sparkles className="w-4 h-4" />
                                 {language === 'fi' ? 'Oppaat' : 'Guides'}
                             </div>
-                            <h1 className="mb-4">
+                            <h1 className="mb-4 text-center">
                                 {language === 'fi' ? (
                                     <>Kaikki mitä tarvitset <span className="text-gradient">kotoutumiseen</span></>
                                 ) : (
                                     <>Everything you need for <span className="text-gradient">integration</span></>
                                 )}
                             </h1>
-                            <p className="text-xl text-gray-600">
+                            <p className="text-xl text-gray-600 text-center">
                                 {language === 'fi'
                                     ? 'Kattavat oppaat auttavat sinua navigoimaan elämässä Suomessa'
                                     : 'Comprehensive guides to help you navigate life in Finland'}
@@ -85,15 +85,13 @@ export default function GuidesPage() {
 
                             return (
                                 <div key={category.id} className="mb-16 last:mb-0">
-                                    {/* Category Header */}
-                                    <div className="flex items-center gap-4 mb-8">
-                                        <div className={`icon-box ${category.iconBg}`}>
+                                    {/* Category Header - Centered */}
+                                    <div className="text-center mb-10">
+                                        <div className={`icon-box ${category.iconBg} mx-auto mb-4`}>
                                             <span className="text-2xl">{category.icon}</span>
                                         </div>
-                                        <div>
-                                            <h2 className="text-2xl font-bold text-gray-900">{category.title}</h2>
-                                            <p className="text-gray-600">{category.description}</p>
-                                        </div>
+                                        <h2 className="text-2xl font-bold text-gray-900 mb-2">{category.title}</h2>
+                                        <p className="text-gray-600 max-w-xl mx-auto">{category.description}</p>
                                     </div>
 
                                     {/* Guides Grid */}
@@ -130,10 +128,10 @@ export default function GuidesPage() {
                 <section className="section section-dark">
                     <div className="container">
                         <div className="max-w-2xl mx-auto text-center">
-                            <h2 className="mb-4">
+                            <h2 className="mb-4 text-center">
                                 {language === 'fi' ? 'Tarvitsetko henkilökohtaista apua?' : 'Need Personal Assistance?'}
                             </h2>
-                            <p className="text-slate-400 mb-8">
+                            <p className="text-slate-400 mb-8 text-center">
                                 {language === 'fi'
                                     ? 'Tutustu paikallisiin maahanmuuttajapalveluihin kaupungissasi'
                                     : 'Explore local immigrant services in your city'}

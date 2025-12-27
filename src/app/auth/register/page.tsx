@@ -1,14 +1,17 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function RegisterPage() {
     const { t, language } = useLanguage();
+    const router = useRouter();
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -16,26 +19,79 @@ export default function RegisterPage() {
         confirmPassword: '',
     });
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
 
         if (formData.password !== formData.confirmPassword) {
-            alert(language === 'fi'
+            setError(language === 'fi'
                 ? 'Salasanat eivät täsmää!'
                 : 'Passwords do not match!');
             return;
         }
 
+        if (formData.password.length < 6) {
+            setError(language === 'fi'
+                ? 'Salasanan on oltava vähintään 6 merkkiä pitkä'
+                : 'Password must be at least 6 characters long');
+            return;
+        }
+
         setLoading(true);
 
-        // TODO: Implement Supabase authentication
-        setTimeout(() => {
+        try {
+            // Sign up with Supabase
+            const { data: authData, error: signUpError } = await supabase.auth.signUp({
+                email: formData.email,
+                password: formData.password,
+                options: {
+                    data: {
+                        full_name: formData.name,
+                    },
+                },
+            });
+
+            if (signUpError) throw signUpError;
+
+            if (authData.user) {
+                // Try to create profile (non-blocking)
+                try {
+                    const { error: profileError } = await supabase
+                        .from('profiles')
+                        .insert({
+                            user_id: authData.user.id,
+                            email: formData.email,
+                            first_name: formData.name.split(' ')[0] || formData.name,
+                            last_name: formData.name.split(' ').slice(1).join(' ') || null,
+                        });
+
+                    if (profileError) {
+                        console.error('Profile creation error:', profileError);
+                        console.warn('User created but profile table may not exist. Please run SQL setup commands.');
+                    }
+                } catch (profileErr) {
+                    console.error('Profile creation failed:', profileErr);
+                    console.warn('Continuing anyway - user account was created successfully.');
+                }
+
+                // Show success message
+                alert(language === 'fi'
+                    ? 'Rekisteröinti onnistui! Tarkista sähköpostisi vahvistaaksesi tilisi.'
+                    : 'Registration successful! Please check your email to confirm your account.');
+
+                // Redirect to login
+                router.push('/auth/login');
+            }
+        } catch (err: any) {
+            console.error('Registration error:', err);
+            setError(err.message || (language === 'fi'
+                ? 'Rekisteröinti epäonnistui. Yritä uudelleen.'
+                : 'Registration failed. Please try again.'));
+        } finally {
             setLoading(false);
-            alert(language === 'fi'
-                ? 'Rekisteröinti tulossa pian! Tämä on demo-versio.'
-                : 'Registration coming soon! This is a demo version.');
-        }, 1000);
+        }
     };
 
     return (
@@ -61,6 +117,14 @@ export default function RegisterPage() {
 
                     {/* Register Form */}
                     <div className="bg-white rounded-xl shadow-md p-8">
+                        {/* Error Message */}
+                        {error && (
+                            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                <p className="text-sm text-red-800">{error}</p>
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Name */}
                             <div>
@@ -199,16 +263,6 @@ export default function RegisterPage() {
                                 </Link>
                             </p>
                         </div>
-                    </div>
-
-                    {/* Demo Notice */}
-                    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-sm text-blue-800">
-                            <strong>{language === 'fi' ? 'Demo-versio:' : 'Demo Version:'}</strong>{' '}
-                            {language === 'fi'
-                                ? 'Tämä on demo-versio. Supabase-autentikointi lisätään pian.'
-                                : 'This is a demo version. Supabase authentication will be added soon.'}
-                        </p>
                     </div>
                 </div>
             </main>

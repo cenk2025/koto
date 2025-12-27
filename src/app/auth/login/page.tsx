@@ -1,29 +1,47 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, AlertCircle } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function LoginPage() {
     const { t, language } = useLanguage();
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
         setLoading(true);
 
-        // TODO: Implement Supabase authentication
-        setTimeout(() => {
+        try {
+            const { data, error: signInError } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (signInError) throw signInError;
+
+            if (data.user) {
+                // Redirect to dashboard
+                router.push('/dashboard');
+            }
+        } catch (err: any) {
+            console.error('Login error:', err);
+            setError(err.message || (language === 'fi'
+                ? 'Kirjautuminen epäonnistui. Tarkista sähköpostisi ja salasanasi.'
+                : 'Login failed. Please check your email and password.'));
+        } finally {
             setLoading(false);
-            alert(language === 'fi'
-                ? 'Kirjautuminen tulossa pian! Tämä on demo-versio.'
-                : 'Login coming soon! This is a demo version.');
-        }, 1000);
+        }
     };
 
     return (
@@ -49,6 +67,14 @@ export default function LoginPage() {
 
                     {/* Login Form */}
                     <div className="bg-white rounded-xl shadow-md p-8">
+                        {/* Error Message */}
+                        {error && (
+                            <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                                <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                                <p className="text-sm text-red-800">{error}</p>
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit} className="space-y-6">
                             {/* Email */}
                             <div>
@@ -140,16 +166,6 @@ export default function LoginPage() {
                                 </Link>
                             </p>
                         </div>
-                    </div>
-
-                    {/* Demo Notice */}
-                    <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-                        <p className="text-sm text-blue-800">
-                            <strong>{language === 'fi' ? 'Demo-versio:' : 'Demo Version:'}</strong>{' '}
-                            {language === 'fi'
-                                ? 'Tämä on demo-versio. Supabase-autentikointi lisätään pian.'
-                                : 'This is a demo version. Supabase authentication will be added soon.'}
-                        </p>
                     </div>
                 </div>
             </main>

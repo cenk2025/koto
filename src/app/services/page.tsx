@@ -67,13 +67,13 @@ export default function ServicesPage() {
                         <div className="bg-white rounded-2xl border border-gray-100 p-6 mb-10 shadow-sm max-w-4xl mx-auto">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 {/* City Filter */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <div className="text-center">
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2 text-center">
                                         {t('services.selectCity')}
                                     </label>
                                     <div className="relative">
                                         <select
-                                            className="input appearance-none pr-10"
+                                            className="input appearance-none pr-10 text-center"
                                             value={selectedCity}
                                             onChange={(e) => setSelectedCity(e.target.value)}
                                         >
@@ -89,13 +89,13 @@ export default function ServicesPage() {
                                 </div>
 
                                 {/* Category Filter */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                <div className="text-center">
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2 text-center">
                                         {language === 'fi' ? 'Kategoria' : 'Category'}
                                     </label>
                                     <div className="relative">
                                         <select
-                                            className="input appearance-none pr-10"
+                                            className="input appearance-none pr-10 text-center"
                                             value={selectedCategory}
                                             onChange={(e) => setSelectedCategory(e.target.value)}
                                         >

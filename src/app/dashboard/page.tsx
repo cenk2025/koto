@@ -1,24 +1,80 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { User, FileText, Bookmark, Edit, Download, MapPin, ChevronRight, Plus, Sparkles } from 'lucide-react';
+import { User, FileText, Bookmark, Edit, Download, MapPin, ChevronRight, Plus, Sparkles, Loader2 } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+
+interface UserProfile {
+    first_name: string | null;
+    last_name: string | null;
+    email: string;
+}
 
 export default function DashboardPage() {
     const { t, language } = useLanguage();
+    const router = useRouter();
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState<any>(null);
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+
+    useEffect(() => {
+        checkUser();
+    }, []);
+
+    const checkUser = async () => {
+        try {
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+
+            if (!authUser) {
+                router.push('/auth/login');
+                return;
+            }
+
+            setUser(authUser);
+
+            // Fetch profile
+            const { data: profileData } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('user_id', authUser.id)
+                .single();
+
+            if (profileData) {
+                setProfile(profileData);
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const getUserDisplayName = () => {
+        if (profile?.first_name) {
+            return profile.last_name
+                ? `${profile.first_name} ${profile.last_name}`
+                : profile.first_name;
+        }
+        return user?.email?.split('@')[0] || 'User';
+    };
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+            </div>
+        );
+    }
 
     const stats = [
-        { icon: FileText, label: language === 'fi' ? 'CV:t' : 'CVs', value: '1', iconBg: 'icon-blue' },
-        { icon: Bookmark, label: language === 'fi' ? 'Tallennetut' : 'Saved', value: '3', iconBg: 'icon-green' },
+        { icon: FileText, label: language === 'fi' ? 'CV:t' : 'CVs', value: '0', iconBg: 'icon-blue' },
+        { icon: Bookmark, label: language === 'fi' ? 'Tallennetut' : 'Saved', value: '0', iconBg: 'icon-green' },
         { icon: MapPin, label: language === 'fi' ? 'Palvelut' : 'Services', value: '50+', iconBg: 'icon-purple' },
-    ];
-
-    const savedServices = [
-        { name: 'Helsinki Immigration Office', city: 'Helsinki', category: language === 'fi' ? 'Maahanmuutto' : 'Immigration' },
-        { name: 'TE Services Helsinki', city: 'Helsinki', category: language === 'fi' ? 'Työllistyminen' : 'Employment' },
-        { name: 'Helsinki Adult Education', city: 'Helsinki', category: language === 'fi' ? 'Koulutus' : 'Education' },
     ];
 
     const quickActions = [
@@ -28,142 +84,128 @@ export default function DashboardPage() {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-50">
+        <div className="min-h-screen flex flex-col bg-white">
             <Header />
 
             <main className="flex-grow">
-                {/* Hero */}
-                <section className="bg-gradient-to-b from-slate-50 to-gray-50 py-12">
+                {/* Hero - Centered */}
+                <section className="section bg-gradient-to-b from-slate-50 to-white">
                     <div className="container">
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl flex items-center justify-center">
-                                <User className="w-6 h-6 text-white" />
+                        <div className="max-w-4xl mx-auto text-center">
+                            {/* Avatar */}
+                            <div className="w-20 h-20 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                                <User className="w-10 h-10 text-white" />
                             </div>
-                            <div>
-                                <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
-                                    {t('dashboard.welcome')}, Demo User! 👋
-                                </h1>
-                                <p className="text-gray-600">
-                                    {language === 'fi' ? 'Tässä on yhteenveto edistymisestäsi' : "Here's a summary of your progress"}
-                                </p>
+
+                            {/* Welcome */}
+                            <h1 className="mb-3" style={{ color: '#0f172a' }}>
+                                {t('dashboard.welcome')}, <span className="text-gradient">{getUserDisplayName()}</span>! 👋
+                            </h1>
+                            <p className="text-xl text-gray-600 mb-12">
+                                {language === 'fi' ? 'Tässä on yhteenveto edistymisestäsi' : "Here's a summary of your progress"}
+                            </p>
+
+                            {/* Stats - Centered */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto">
+                                {stats.map((stat, index) => {
+                                    const Icon = stat.icon;
+                                    return (
+                                        <div key={index} className="card text-center">
+                                            <div className={`icon-box ${stat.iconBg} mx-auto mb-4`}>
+                                                <Icon className="w-6 h-6" />
+                                            </div>
+                                            <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                                            <div className="text-sm text-gray-500">{stat.label}</div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <section className="py-10">
+                {/* Content Section */}
+                <section className="section section-gray">
                     <div className="container">
-                        {/* Stats */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                            {stats.map((stat, index) => {
-                                const Icon = stat.icon;
-                                return (
-                                    <div key={index} className="card flex items-center gap-5">
-                                        <div className={`icon-box ${stat.iconBg}`}>
-                                            <Icon className="w-6 h-6" />
+                        <div className="max-w-5xl mx-auto">
+                            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                {/* Main Content */}
+                                <div className="lg:col-span-2 space-y-8">
+                                    {/* My CV */}
+                                    <div className="card">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <h2 className="text-xl font-bold" style={{ color: '#0f172a' }}>{t('dashboard.myCv')}</h2>
                                         </div>
-                                        <div>
-                                            <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                                            <div className="text-sm text-gray-500">{stat.label}</div>
+                                        <div className="text-center py-8 bg-gray-50 rounded-2xl">
+                                            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                                            <p className="text-gray-500 mb-4">
+                                                {language === 'fi'
+                                                    ? 'Et ole vielä luonut CV:tä'
+                                                    : 'You haven\'t created a CV yet'}
+                                            </p>
+                                            <Link href="/cv-builder" className="btn-primary text-sm py-2.5 px-5">
+                                                <Plus className="w-4 h-4 mr-2" />
+                                                {language === 'fi' ? 'Luo CV' : 'Create CV'}
+                                            </Link>
                                         </div>
                                     </div>
-                                );
-                            })}
-                        </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                            {/* Main Content */}
-                            <div className="lg:col-span-2 space-y-8">
-                                {/* My CV */}
-                                <div className="card">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h2 className="text-xl font-bold text-gray-900">{t('dashboard.myCv')}</h2>
-                                        <Link href="/cv-builder" className="btn-primary text-sm py-2.5 px-5">
+                                    {/* Saved Services */}
+                                    <div className="card">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <h2 className="text-xl font-bold" style={{ color: '#0f172a' }}>{t('dashboard.savedServices')}</h2>
+                                            <Link href="/services" className="text-sm text-blue-600 hover:text-blue-700 font-semibold flex items-center">
+                                                {language === 'fi' ? 'Selaa palveluita' : 'Browse services'}
+                                                <ChevronRight className="w-4 h-4" />
+                                            </Link>
+                                        </div>
+                                        <div className="text-center py-8 bg-gray-50 rounded-xl">
+                                            <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                                            <p className="text-gray-500 mb-4">
+                                                {language === 'fi'
+                                                    ? 'Et ole vielä tallentanut palveluita'
+                                                    : 'You haven\'t saved any services yet'}
+                                            </p>
+                                            <Link href="/services" className="btn-primary text-sm py-2.5 px-5">
+                                                {language === 'fi' ? 'Etsi palveluita' : 'Find services'}
+                                            </Link>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Sidebar */}
+                                <div className="space-y-6">
+                                    {/* Profile */}
+                                    <div className="card text-center">
+                                        <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <User className="w-8 h-8 text-white" />
+                                        </div>
+                                        <h3 className="font-semibold mb-1" style={{ color: '#0f172a' }}>{getUserDisplayName()}</h3>
+                                        <p className="text-sm text-gray-500 mb-5">{profile?.email || user?.email}</p>
+                                        <Link href="/cv-builder" className="btn-secondary w-full text-sm py-2.5">
                                             <Edit className="w-4 h-4 mr-2" />
                                             {t('common.edit')}
                                         </Link>
                                     </div>
-                                    <div className="flex items-center gap-5 p-5 bg-gray-50 rounded-2xl">
-                                        <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center border border-gray-100">
-                                            <User className="w-8 h-8 text-gray-400" />
-                                        </div>
-                                        <div className="flex-1">
-                                            <h3 className="font-semibold text-gray-900 mb-1">Demo User CV</h3>
-                                            <p className="text-sm text-gray-500">
-                                                {language === 'fi' ? 'Viimeksi päivitetty: 2 päivää sitten' : 'Last updated: 2 days ago'}
-                                            </p>
-                                        </div>
-                                        <button className="btn-secondary text-sm py-2.5 px-5">
-                                            <Download className="w-4 h-4 mr-2" />
-                                            PDF
-                                        </button>
-                                    </div>
-                                </div>
 
-                                {/* Saved Services */}
-                                <div className="card">
-                                    <div className="flex items-center justify-between mb-6">
-                                        <h2 className="text-xl font-bold text-gray-900">{t('dashboard.savedServices')}</h2>
-                                        <Link href="/services" className="text-sm text-blue-600 hover:text-blue-700 font-semibold flex items-center">
-                                            {language === 'fi' ? 'Näytä kaikki' : 'View all'}
-                                            <ChevronRight className="w-4 h-4" />
-                                        </Link>
-                                    </div>
-                                    <div className="space-y-4">
-                                        {savedServices.map((service, index) => (
-                                            <div key={index} className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
-                                                <div className="w-11 h-11 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
-                                                    <MapPin className="w-5 h-5" />
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <h3 className="font-medium text-gray-900 truncate">{service.name}</h3>
-                                                    <p className="text-sm text-gray-500">{service.city} • {service.category}</p>
-                                                </div>
-                                                <ChevronRight className="w-5 h-5 text-gray-400" />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Sidebar */}
-                            <div className="space-y-6">
-                                {/* Profile */}
-                                <div className="card">
-                                    <h2 className="text-lg font-bold text-gray-900 mb-5">{t('dashboard.profile')}</h2>
-                                    <div className="flex items-center gap-4 mb-5">
-                                        <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-full flex items-center justify-center text-white">
-                                            <User className="w-7 h-7" />
+                                    {/* Quick Actions */}
+                                    <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6">
+                                        <h2 className="text-lg font-bold mb-5 flex items-center justify-center gap-2" style={{ color: 'white' }}>
+                                            <Sparkles className="w-5 h-5" />
+                                            {language === 'fi' ? 'Pika-toiminnot' : 'Quick Actions'}
+                                        </h2>
+                                        <div className="space-y-3">
+                                            {quickActions.map((action, i) => (
+                                                <Link
+                                                    key={i}
+                                                    href={action.href}
+                                                    className="flex items-center justify-center gap-3 p-3.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors text-white"
+                                                >
+                                                    <action.icon className="w-5 h-5" />
+                                                    <span className="font-medium text-sm">{action.label}</span>
+                                                </Link>
+                                            ))}
                                         </div>
-                                        <div>
-                                            <h3 className="font-semibold text-gray-900">Demo User</h3>
-                                            <p className="text-sm text-gray-500">demo@example.com</p>
-                                        </div>
-                                    </div>
-                                    <button className="btn-secondary w-full text-sm py-2.5">
-                                        <Edit className="w-4 h-4 mr-2" />
-                                        {t('common.edit')}
-                                    </button>
-                                </div>
-
-                                {/* Quick Actions */}
-                                <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-2xl p-6 text-white">
-                                    <h2 className="text-lg font-bold mb-5 flex items-center gap-2">
-                                        <Sparkles className="w-5 h-5" />
-                                        {language === 'fi' ? 'Pika-toiminnot' : 'Quick Actions'}
-                                    </h2>
-                                    <div className="space-y-3">
-                                        {quickActions.map((action, i) => (
-                                            <Link
-                                                key={i}
-                                                href={action.href}
-                                                className="flex items-center gap-3 p-3.5 bg-white/10 hover:bg-white/20 rounded-xl transition-colors"
-                                            >
-                                                <action.icon className="w-5 h-5" />
-                                                <span className="font-medium text-sm">{action.label}</span>
-                                                <ChevronRight className="w-4 h-4 ml-auto" />
-                                            </Link>
-                                        ))}
                                     </div>
                                 </div>
                             </div>

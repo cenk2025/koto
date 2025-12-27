@@ -385,6 +385,8 @@ body {
   filter: blur(80px);
   opacity: 0.3;
   animation: blob 20s infinite;
+  z-index: -1;
+  pointer-events: none;
 }
 
 @keyframes blob {
@@ -442,16 +444,20 @@ h6 {
 }
 
 h1 {
-  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: clamp(2rem, 5vw, 3rem);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 h3 {
-  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 600;
 }
 
 p {

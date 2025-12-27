@@ -85,50 +85,52 @@ export default function GuidesPage() {
                     </div>
 
                     {/* Categories */}
-                    <div className="space-y-16">
+                    <div className="space-y-20">
                         {categories.map((category, index) => {
                             const categoryGuides = groupedGuides[category.id as keyof typeof groupedGuides];
 
                             if (categoryGuides.length === 0) return null;
 
                             return (
-                                <div key={category.id} className="fade-in-up" style={{ animationDelay: `${index * 0.2}s` }}>
-                                    {/* Category Header */}
-                                    <div className={`relative bg-gradient-to-r ${category.color} rounded-2xl p-8 mb-8 text-white overflow-hidden shadow-lg ${category.shadow}`}>
-                                        <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                                        <div className="relative z-10 flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-6">
-                                            <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center text-5xl shadow-inner">
-                                                {category.icon}
-                                            </div>
-                                            <div>
-                                                <h2 className="text-3xl font-bold mb-2">{category.title}</h2>
-                                                <p className="text-white/90 text-lg">{category.description}</p>
-                                            </div>
+                                <div key={category.id} className="fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                                    {/* Category Header - Clean Modern Style */}
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${category.color} flex items-center justify-center text-2xl shadow-lg shadow-gray-200`}>
+                                            {category.icon}
+                                        </div>
+                                        <div>
+                                            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                                                {category.title}
+                                            </h2>
+                                            <p className="text-gray-500 font-medium">
+                                                {category.description}
+                                            </p>
                                         </div>
                                     </div>
 
                                     {/* Guides Grid */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                                         {categoryGuides.map((guide, i) => (
                                             <Link
                                                 key={guide.id}
                                                 href={`/guides/${guide.id}`}
-                                                className="group card-premium h-full hover:border-blue-300 border border-transparent transition-all"
+                                                className="group card-premium h-full hover:border-blue-300 border border-transparent transition-all p-6 md:p-8 flex flex-col"
                                             >
-                                                <div className="flex flex-col h-full">
-                                                    <div className="text-4xl mb-6 transform group-hover:scale-110 transition-transform duration-300">
-                                                        {guide.icon}
-                                                    </div>
-                                                    <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
-                                                        {language === 'fi' ? guide.titleFi : guide.title}
-                                                    </h3>
-                                                    <p className="text-gray-600 mb-6 flex-grow line-clamp-3">
-                                                        {language === 'fi' ? guide.descriptionFi : guide.description}
-                                                    </p>
-                                                    <div className="flex items-center text-blue-600 font-semibold group-hover:gap-2 transition-all mt-auto">
-                                                        {language === 'fi' ? 'Lue opas' : 'Read guide'}
-                                                        <ArrowRight className="w-5 h-5 ml-1 group-hover:translate-x-2 transition-transform" />
-                                                    </div>
+                                                <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 group-hover:bg-blue-100 transition-all duration-300">
+                                                    {guide.icon}
+                                                </div>
+
+                                                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors leading-tight break-words">
+                                                    {language === 'fi' ? guide.titleFi : guide.title}
+                                                </h3>
+
+                                                <p className="text-gray-600 mb-6 flex-grow leading-relaxed">
+                                                    {language === 'fi' ? guide.descriptionFi : guide.description}
+                                                </p>
+
+                                                <div className="flex items-center text-blue-600 font-bold text-sm uppercase tracking-wide group-hover:gap-2 transition-all mt-auto pt-4 border-t border-gray-50">
+                                                    {language === 'fi' ? 'Lue opas' : 'Read guide'}
+                                                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
                                                 </div>
                                             </Link>
                                         ))}

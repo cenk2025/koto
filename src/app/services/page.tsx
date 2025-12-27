@@ -190,97 +190,94 @@ export default function ServicesPage() {
 
                     {/* Services Grid */}
                     {filteredServices.length > 0 ? (
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 fade-in-up stagger-3">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 lg:gap-8 fade-in-up stagger-3">
                             {filteredServices.map((service, index) => (
                                 <div
                                     key={service.id}
-                                    className="card-premium p-0 overflow-hidden hover:border-blue-300 border border-transparent"
+                                    className="card-premium p-6 hover:border-blue-300 border border-transparent flex flex-col group"
                                     style={{ animationDelay: `${index * 0.1}s` }}
                                 >
-                                    {/* Category Header */}
-                                    <div className={`bg-gradient-to-r ${getCategoryColor(service.category)} px-8 py-6`}>
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-4">
-                                                <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-xl flex items-center justify-center text-3xl shadow-inner">
-                                                    {getCategoryIcon(service.category)}
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-xl font-bold text-white leading-tight">
-                                                        {language === 'fi' ? service.nameFi : service.name}
-                                                    </h3>
-                                                    <p className="text-blue-50 text-sm font-medium mt-1">
-                                                        {cities.find(c => c.id === service.cityId)?.[language === 'fi' ? 'nameFi' : 'name']}
-                                                    </p>
-                                                </div>
+                                    {/* Header - Clean */}
+                                    <div className="flex items-start justify-between mb-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${getCategoryColor(service.category)} flex items-center justify-center text-2xl shadow-lg`}>
+                                                {getCategoryIcon(service.category)}
                                             </div>
-                                            <span className="badge-premium bg-white/20 backdrop-blur-sm border border-white/30 text-white shadow-none">
-                                                {categories.find(c => c.id === service.category)?.name}
-                                            </span>
+                                            <div>
+                                                <div className="badge-premium bg-blue-50 text-blue-700 border border-blue-100 shadow-none mb-2">
+                                                    {categories.find(c => c.id === service.category)?.name}
+                                                </div>
+                                                <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                                                    {language === 'fi' ? service.nameFi : service.name}
+                                                </h3>
+                                            </div>
                                         </div>
                                     </div>
 
                                     {/* Service Details */}
-                                    <div className="p-8 space-y-6">
+                                    <div className="space-y-6 flex-grow">
                                         <p className="text-gray-600 leading-relaxed">
                                             {language === 'fi' ? service.descriptionFi : service.description}
                                         </p>
 
-                                        <div className="space-y-4 pt-6 border-t border-gray-100">
-                                            {/* Address */}
-                                            <div className="flex items-start space-x-4 group">
-                                                <div className="p-2 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
-                                                    <MapPin className="w-5 h-5 text-blue-600" />
+                                        <div className="space-y-3 pt-6 border-t border-gray-100">
+                                            {/* City */}
+                                            <div className="flex items-center gap-3 text-sm font-medium text-gray-500">
+                                                <div className="p-1.5 bg-gray-100 rounded-lg">
+                                                    <MapPin className="w-4 h-4 text-gray-600" />
                                                 </div>
-                                                <span className="text-gray-700 mt-1 font-medium">{service.address}</span>
+                                                <span className="text-gray-900">{cities.find(c => c.id === service.cityId)?.[language === 'fi' ? 'nameFi' : 'name']}</span>
+                                            </div>
+
+                                            {/* Address */}
+                                            <div className="flex items-start gap-3 text-sm">
+                                                <div className="p-1.5 bg-blue-50 rounded-lg shrink-0">
+                                                    <MapPin className="w-4 h-4 text-blue-600" />
+                                                </div>
+                                                <span className="text-gray-700 mt-0.5 break-words">{service.address}</span>
                                             </div>
 
                                             {/* Phone */}
-                                            <div className="flex items-center space-x-4 group">
-                                                <div className="p-2 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors">
-                                                    <Phone className="w-5 h-5 text-green-600" />
+                                            <div className="flex items-center gap-3 text-sm">
+                                                <div className="p-1.5 bg-green-50 rounded-lg shrink-0">
+                                                    <Phone className="w-4 h-4 text-green-600" />
                                                 </div>
-                                                <a
-                                                    href={`tel:${service.phone}`}
-                                                    className="text-gray-700 hover:text-green-600 font-medium transition-colors"
-                                                >
+                                                <a href={`tel:${service.phone}`} className="text-gray-700 hover:text-green-600 transition-colors font-medium">
                                                     {service.phone}
                                                 </a>
                                             </div>
 
                                             {/* Email */}
-                                            <div className="flex items-center space-x-4 group">
-                                                <div className="p-2 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
-                                                    <Mail className="w-5 h-5 text-purple-600" />
+                                            <div className="flex items-center gap-3 text-sm">
+                                                <div className="p-1.5 bg-purple-50 rounded-lg shrink-0">
+                                                    <Mail className="w-4 h-4 text-purple-600" />
                                                 </div>
-                                                <a
-                                                    href={`mailto:${service.email}`}
-                                                    className="text-gray-700 hover:text-purple-600 font-medium break-all transition-colors"
-                                                >
+                                                <a href={`mailto:${service.email}`} className="text-gray-700 hover:text-purple-600 transition-colors break-all font-medium">
                                                     {service.email}
                                                 </a>
                                             </div>
 
                                             {/* Website */}
-                                            <div className="flex items-center space-x-4 group">
-                                                <div className="p-2 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors">
-                                                    <GlobeIcon className="w-5 h-5 text-indigo-600" />
+                                            <div className="flex items-center gap-3 text-sm">
+                                                <div className="p-1.5 bg-indigo-50 rounded-lg shrink-0">
+                                                    <GlobeIcon className="w-4 h-4 text-indigo-600" />
                                                 </div>
                                                 <a
                                                     href={service.website}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="text-gray-700 hover:text-indigo-600 font-medium break-all transition-colors hover:underline"
+                                                    className="text-gray-700 hover:text-indigo-600 transition-colors break-all hover:underline font-medium"
                                                 >
                                                     {service.website.replace('https://', '')}
                                                 </a>
                                             </div>
 
                                             {/* Opening Hours */}
-                                            <div className="flex items-start space-x-4 group">
-                                                <div className="p-2 bg-orange-50 rounded-lg group-hover:bg-orange-100 transition-colors">
-                                                    <Clock className="w-5 h-5 text-orange-600" />
+                                            <div className="flex items-start gap-3 text-sm">
+                                                <div className="p-1.5 bg-orange-50 rounded-lg shrink-0">
+                                                    <Clock className="w-4 h-4 text-orange-600" />
                                                 </div>
-                                                <span className="text-gray-700 mt-1 font-medium">
+                                                <span className="text-gray-700 mt-0.5 font-medium">
                                                     {language === 'fi' ? service.openingHoursFi : service.openingHours}
                                                 </span>
                                             </div>

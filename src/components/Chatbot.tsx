@@ -138,57 +138,58 @@ export default function Chatbot() {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-700 rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center group hover:scale-110"
+                    className="fixed bottom-6 right-6 z-50 w-16 h-16 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 flex items-center justify-center group hover:scale-110 pulse-glow"
                     aria-label="Open chat"
                 >
-                    <MessageCircle className="w-8 h-8 text-white" />
+                    <MessageCircle className="w-8 h-8 text-white group-hover:scale-110 transition-transform" />
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white animate-pulse"></div>
                 </button>
             )}
 
             {/* Chat Window */}
             {isOpen && (
-                <div className="fixed bottom-6 right-6 z-50 w-full max-w-md h-[600px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                <div className="fixed bottom-6 right-6 z-50 w-full max-w-md h-[600px] glass rounded-3xl shadow-2xl flex flex-col overflow-hidden border border-white/20">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-4 flex items-center justify-between">
+                    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 px-6 py-5 flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                                <Sparkles className="w-6 h-6 text-white" />
+                            <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center pulse-glow">
+                                <Sparkles className="w-7 h-7 text-white" />
                             </div>
                             <div>
                                 <h3 className="text-white font-bold text-lg">
                                     {language === 'fi' ? 'AI Avustaja' : 'AI Assistant'}
                                 </h3>
-                                <p className="text-blue-100 text-xs">
-                                    {language === 'fi' ? 'Aina valmis auttamaan' : 'Always ready to help'}
+                                <p className="text-white/90 text-xs flex items-center space-x-1">
+                                    <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                                    <span>{language === 'fi' ? 'Aina valmis auttamaan' : 'Always ready to help'}</span>
                                 </p>
                             </div>
                         </div>
                         <button
                             onClick={() => setIsOpen(false)}
-                            className="text-white hover:bg-white/20 rounded-lg p-2 transition-colors"
+                            className="text-white hover:bg-white/20 rounded-xl p-2 transition-all hover:rotate-90 duration-300"
                         >
                             <X className="w-6 h-6" />
                         </button>
                     </div>
 
                     {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+                    <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-br from-gray-50 to-blue-50/30">
                         {messages.length === 0 && (
                             <div className="text-center py-8">
-                                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                    <Sparkles className="w-8 h-8 text-blue-600" />
+                                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 pulse-glow">
+                                    <Sparkles className="w-10 h-10 text-white" />
                                 </div>
-                                <h4 className="text-lg font-bold text-gray-900 mb-2">
+                                <h4 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
                                     {language === 'fi' ? 'Tervetuloa!' : 'Welcome!'}
                                 </h4>
-                                <p className="text-gray-600 mb-6">
+                                <p className="text-gray-600 mb-8 leading-relaxed">
                                     {language === 'fi'
                                         ? 'Kysy minulta mitä tahansa elämästä Suomessa'
                                         : 'Ask me anything about life in Finland'}
                                 </p>
-                                <div className="space-y-2">
-                                    <p className="text-sm font-medium text-gray-700 mb-3">
+                                <div className="space-y-3">
+                                    <p className="text-sm font-semibold text-gray-700 mb-4">
                                         {language === 'fi' ? 'Pikakysymykset:' : 'Quick questions:'}
                                     </p>
                                     {quickQuestions.map((question, index) => (
@@ -198,7 +199,7 @@ export default function Chatbot() {
                                                 setInput(question);
                                                 inputRef.current?.focus();
                                             }}
-                                            className="block w-full text-left px-4 py-2 bg-white rounded-lg hover:bg-blue-50 transition-colors text-sm text-gray-700 hover:text-blue-600"
+                                            className="block w-full text-left px-5 py-3 glass rounded-2xl hover:bg-white transition-all text-sm text-gray-700 hover:text-blue-600 font-medium hover-lift"
                                         >
                                             {question}
                                         </button>
@@ -213,22 +214,22 @@ export default function Chatbot() {
                                 className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
                                 <div
-                                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${message.role === 'user'
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-white text-gray-900 shadow-md'
+                                    className={`max-w-[80%] rounded-3xl px-5 py-4 ${message.role === 'user'
+                                        ? 'bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white shadow-lg'
+                                        : 'glass text-gray-900 shadow-md border border-white/20'
                                         }`}
                                 >
-                                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                                    <p className="text-sm whitespace-pre-wrap leading-relaxed">{message.content}</p>
                                 </div>
                             </div>
                         ))}
 
                         {isLoading && (
                             <div className="flex justify-start">
-                                <div className="bg-white rounded-2xl px-4 py-3 shadow-md">
-                                    <div className="flex items-center space-x-2">
-                                        <Loader2 className="w-4 h-4 text-blue-600 animate-spin" />
-                                        <span className="text-sm text-gray-600">
+                                <div className="glass rounded-3xl px-5 py-4 shadow-md border border-white/20">
+                                    <div className="flex items-center space-x-3">
+                                        <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                                        <span className="text-sm text-gray-600 font-medium">
                                             {language === 'fi' ? 'Kirjoittaa...' : 'Typing...'}
                                         </span>
                                     </div>
@@ -240,8 +241,8 @@ export default function Chatbot() {
                     </div>
 
                     {/* Input */}
-                    <form onSubmit={sendMessage} className="p-4 bg-white border-t border-gray-200">
-                        <div className="flex items-center space-x-2">
+                    <form onSubmit={sendMessage} className="p-5 glass border-t border-white/20">
+                        <div className="flex items-center space-x-3">
                             <input
                                 ref={inputRef}
                                 type="text"
@@ -252,15 +253,15 @@ export default function Chatbot() {
                                         ? 'Kirjoita viestisi...'
                                         : 'Type your message...'
                                 }
-                                className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                className="flex-1 px-5 py-4 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white/80 backdrop-blur-sm"
                                 disabled={isLoading}
                             />
                             <button
                                 type="submit"
                                 disabled={!input.trim() || isLoading}
-                                className="bg-blue-600 text-white p-3 rounded-xl hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="bg-gradient-to-br from-blue-600 via-purple-600 to-pink-600 text-white p-4 rounded-2xl hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95"
                             >
-                                <Send className="w-5 h-5" />
+                                <Send className="w-6 h-6" />
                             </button>
                         </div>
                     </form>

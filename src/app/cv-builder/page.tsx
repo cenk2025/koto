@@ -173,39 +173,32 @@ export default function CVBuilder() {
     ];
 
     return (
-        <div className="min-h-screen flex flex-col relative overflow-hidden">
-            {/* Animated Background Blobs */}
-            <div className="blob blob-1"></div>
-            <div className="blob blob-2"></div>
-            <div className="blob blob-3"></div>
-
+        <div className="min-h-screen flex flex-col bg-gray-50">
             <Header />
 
-            <main className="flex-grow py-12 relative z-10">
+            <main className="flex-grow py-8 md:py-12">
                 <div className="container mx-auto px-4">
                     {/* Header */}
-                    <div className="mb-12 text-center fade-in-up">
-                        <div className="inline-flex items-center space-x-2 glass px-6 py-3 rounded-full mb-6 mx-auto">
-                            <FileText className="w-5 h-5 text-blue-600" />
-                            <span className="text-sm font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                                CV Builder
-                            </span>
+                    <div className="mb-8">
+                        <div className="flex items-center gap-2 text-blue-600 text-sm font-medium mb-3">
+                            <FileText className="w-4 h-4" />
+                            <span>CV Builder</span>
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
                             {t('cv.title')}
                         </h1>
-                        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                        <p className="text-gray-600 max-w-2xl">
                             {language === 'fi'
                                 ? 'Luo ammattimainen CV suomalaisen työmarkkinan vaatimusten mukaisesti'
                                 : 'Create a professional CV that meets Finnish job market standards'}
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                         {/* Sidebar Navigation */}
-                        <div className="lg:col-span-1 fade-in-up stagger-1">
-                            <div className="card-premium p-6 sticky top-24">
-                                <nav className="space-y-2">
+                        <div className="lg:col-span-1">
+                            <div className="card sticky top-20">
+                                <nav className="space-y-1">
                                     {sections.map((section) => {
                                         const Icon = section.icon;
                                         const isActive = activeSection === section.id;
@@ -213,30 +206,27 @@ export default function CVBuilder() {
                                             <button
                                                 key={section.id}
                                                 onClick={() => setActiveSection(section.id)}
-                                                className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-300 ${isActive
-                                                    ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg scale-105'
-                                                    : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
+                                                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-50'
                                                     }`}
                                             >
-                                                <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-gray-400 group-hover:text-blue-600'}`} />
-                                                <span className="font-medium">{section.name}</span>
-                                                {isActive && <ChevronRight className="w-4 h-4 ml-auto animate-pulse" />}
+                                                <Icon className="w-4 h-4 flex-shrink-0" />
+                                                <span className="truncate">{section.name}</span>
                                             </button>
                                         );
                                     })}
                                 </nav>
 
                                 {/* Actions */}
-                                <div className="mt-8 space-y-3 pt-6 border-t border-gray-100">
-                                    <button className="w-full btn-premium btn-primary flex items-center justify-center group">
-                                        <Save className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                                <div className="mt-6 space-y-2 pt-4 border-t border-gray-100">
+                                    <button className="w-full btn-primary flex items-center justify-center text-sm">
+                                        <Save className="w-4 h-4 mr-2" />
                                         {t('cv.actions.save')}
                                     </button>
                                     <button
                                         onClick={handleDownloadPDF}
-                                        className="w-full btn-premium btn-secondary flex items-center justify-center group"
+                                        className="w-full btn-secondary flex items-center justify-center text-sm"
                                     >
-                                        <Download className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
+                                        <Download className="w-4 h-4 mr-2" />
                                         {t('cv.actions.download')}
                                     </button>
                                 </div>
@@ -245,7 +235,7 @@ export default function CVBuilder() {
 
                         {/* Main Content */}
                         <div className="lg:col-span-3">
-                            <div className="card-premium p-8 fade-in-up stagger-2">
+                            <div className="card">
                                 {/* Personal Information */}
                                 {activeSection === 'personal' && (
                                     <div className="space-y-6">
@@ -295,7 +285,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.firstName}
                                                     onChange={(e) =>
                                                         setCV({
@@ -311,7 +301,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.lastName}
                                                     onChange={(e) =>
                                                         setCV({
@@ -327,7 +317,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="email"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.email}
                                                     onChange={(e) =>
                                                         setCV({
@@ -343,7 +333,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="tel"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.phone}
                                                     onChange={(e) =>
                                                         setCV({
@@ -359,7 +349,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.address}
                                                     onChange={(e) =>
                                                         setCV({
@@ -375,7 +365,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.city}
                                                     onChange={(e) =>
                                                         setCV({
@@ -391,7 +381,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.postalCode}
                                                     onChange={(e) =>
                                                         setCV({
@@ -407,7 +397,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="date"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.dateOfBirth}
                                                     onChange={(e) =>
                                                         setCV({
@@ -423,7 +413,7 @@ export default function CVBuilder() {
                                                 </label>
                                                 <input
                                                     type="text"
-                                                    className="input-premium"
+                                                    className="input"
                                                     value={cv.personalInfo.nationality}
                                                     onChange={(e) =>
                                                         setCV({
@@ -445,7 +435,7 @@ export default function CVBuilder() {
                                         </h2>
                                         <div>
                                             <textarea
-                                                className="textarea-premium"
+                                                className="textarea"
                                                 rows={8}
                                                 placeholder={t('cv.summary.placeholder')}
                                                 value={cv.summary}
@@ -464,7 +454,7 @@ export default function CVBuilder() {
                                             </h2>
                                             <button
                                                 onClick={addExperience}
-                                                className="btn-premium btn-primary flex items-center"
+                                                className="btn-primary flex items-center"
                                             >
                                                 <Plus className="w-5 h-5 mr-2" />
                                                 {t('cv.experience.add')}
@@ -492,7 +482,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={exp.jobTitle}
                                                             onChange={(e) => updateExperience(exp.id, 'jobTitle', e.target.value)}
                                                         />
@@ -503,7 +493,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={exp.company}
                                                             onChange={(e) => updateExperience(exp.id, 'company', e.target.value)}
                                                         />
@@ -514,7 +504,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={exp.location}
                                                             onChange={(e) => updateExperience(exp.id, 'location', e.target.value)}
                                                         />
@@ -525,7 +515,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="month"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={exp.startDate}
                                                             onChange={(e) => updateExperience(exp.id, 'startDate', e.target.value)}
                                                         />
@@ -536,7 +526,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="month"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={exp.endDate}
                                                             onChange={(e) => updateExperience(exp.id, 'endDate', e.target.value)}
                                                             disabled={exp.current}
@@ -560,7 +550,7 @@ export default function CVBuilder() {
                                                             {t('cv.experience.description')}
                                                         </label>
                                                         <textarea
-                                                            className="textarea-premium"
+                                                            className="textarea"
                                                             rows={4}
                                                             value={exp.description}
                                                             onChange={(e) => updateExperience(exp.id, 'description', e.target.value)}
@@ -589,7 +579,7 @@ export default function CVBuilder() {
                                             </h2>
                                             <button
                                                 onClick={addEducation}
-                                                className="btn-premium btn-primary flex items-center"
+                                                className="btn-primary flex items-center"
                                             >
                                                 <Plus className="w-5 h-5 mr-2" />
                                                 {t('cv.education.add')}
@@ -617,7 +607,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={edu.degree}
                                                             onChange={(e) => updateEducation(edu.id, 'degree', e.target.value)}
                                                         />
@@ -628,7 +618,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={edu.institution}
                                                             onChange={(e) => updateEducation(edu.id, 'institution', e.target.value)}
                                                         />
@@ -639,7 +629,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="text"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={edu.fieldOfStudy}
                                                             onChange={(e) => updateEducation(edu.id, 'fieldOfStudy', e.target.value)}
                                                         />
@@ -650,7 +640,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="month"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={edu.startDate}
                                                             onChange={(e) => updateEducation(edu.id, 'startDate', e.target.value)}
                                                         />
@@ -661,7 +651,7 @@ export default function CVBuilder() {
                                                         </label>
                                                         <input
                                                             type="month"
-                                                            className="input-premium"
+                                                            className="input"
                                                             value={edu.endDate}
                                                             onChange={(e) => updateEducation(edu.id, 'endDate', e.target.value)}
                                                         />
@@ -671,7 +661,7 @@ export default function CVBuilder() {
                                                             {t('cv.education.description')}
                                                         </label>
                                                         <textarea
-                                                            className="textarea-premium"
+                                                            className="textarea"
                                                             rows={3}
                                                             value={edu.description}
                                                             onChange={(e) => updateEducation(edu.id, 'description', e.target.value)}
@@ -700,7 +690,7 @@ export default function CVBuilder() {
                                             </h2>
                                             <button
                                                 onClick={addSkill}
-                                                className="btn-premium btn-primary flex items-center"
+                                                className="btn-primary flex items-center"
                                             >
                                                 <Plus className="w-5 h-5 mr-2" />
                                                 {t('cv.skills.add')}
@@ -726,7 +716,7 @@ export default function CVBuilder() {
                                                         </button>
                                                     </div>
                                                     <select
-                                                        className="input-premium"
+                                                        className="input"
                                                         value={skill.level}
                                                         onChange={(e) => updateSkill(skill.id, 'level', e.target.value)}
                                                     >
@@ -758,7 +748,7 @@ export default function CVBuilder() {
                                             </h2>
                                             <button
                                                 onClick={addLanguage}
-                                                className="btn-premium btn-primary flex items-center"
+                                                className="btn-primary flex items-center"
                                             >
                                                 <Plus className="w-5 h-5 mr-2" />
                                                 {t('cv.languages.add')}
@@ -784,7 +774,7 @@ export default function CVBuilder() {
                                                         </button>
                                                     </div>
                                                     <select
-                                                        className="input-premium"
+                                                        className="input"
                                                         value={lang.proficiency}
                                                         onChange={(e) => updateLanguage(lang.id, 'proficiency', e.target.value)}
                                                     >

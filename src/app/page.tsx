@@ -4,39 +4,39 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { FileText, Briefcase, MapPin, Shield, ArrowRight } from 'lucide-react';
+import { FileText, Briefcase, MapPin, Shield, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const { t, language } = useLanguage();
 
   const features = [
     {
-      icon: Shield,
+      icon: '⚖️',
       title: t('features.legal.title'),
       description: t('features.legal.desc'),
       href: '/guides?category=legal',
-      color: 'bg-blue-100 text-blue-600',
+      iconBg: 'icon-blue',
     },
     {
-      icon: Briefcase,
+      icon: '💼',
       title: t('features.work.title'),
       description: t('features.work.desc'),
       href: '/guides?category=work',
-      color: 'bg-green-100 text-green-600',
+      iconBg: 'icon-green',
     },
     {
-      icon: FileText,
+      icon: '📝',
       title: t('features.cv.title'),
       description: t('features.cv.desc'),
       href: '/cv-builder',
-      color: 'bg-purple-100 text-purple-600',
+      iconBg: 'icon-purple',
     },
     {
-      icon: MapPin,
+      icon: '📍',
       title: t('features.services.title'),
       description: t('features.services.desc'),
       href: '/services',
-      color: 'bg-orange-100 text-orange-600',
+      iconBg: 'icon-orange',
     },
   ];
 
@@ -47,133 +47,169 @@ export default function Home() {
     { number: '1000+', label: language === 'fi' ? 'Käyttäjää' : 'Users' },
   ];
 
+  const benefits = [
+    language === 'fi' ? 'Kattavat oppaat suomeksi ja englanniksi' : 'Comprehensive guides in Finnish and English',
+    language === 'fi' ? 'Ammattimainen CV-työkalu' : 'Professional CV builder tool',
+    language === 'fi' ? 'Paikallisten palveluiden hakemisto' : 'Local services directory',
+    language === 'fi' ? 'Henkilökohtainen hallintapaneeli' : 'Personal dashboard',
+  ];
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="py-16 md:py-24 bg-gradient-to-b from-blue-50 to-white">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-medium mb-6">
-                🇫🇮 {language === 'fi' ? 'Tervetuloa Suomeen' : 'Welcome to Finland'}
+        <section className="section bg-gradient-to-b from-slate-50 to-white">
+          <div className="container">
+            <div className="max-w-4xl mx-auto text-center">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-5 py-2.5 rounded-full text-sm font-semibold mb-8">
+                <Sparkles className="w-4 h-4" />
+                {language === 'fi' ? 'Tervetuloa Suomeen!' : 'Welcome to Finland!'}
               </div>
 
-              <h1 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                {t('home.hero.title')}
+              {/* Headline */}
+              <h1 className="mb-6">
+                {language === 'fi' ? (
+                  <>Kaikki mitä tarvitset <span className="text-gradient">uuden elämän</span> aloittamiseen</>
+                ) : (
+                  <>Everything you need to <span className="text-gradient">start your new life</span></>
+                )}
               </h1>
 
-              <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+              {/* Subtitle */}
+              <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
                 {t('home.hero.subtitle')}
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/auth/register" className="btn-primary px-6 py-3">
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+                <Link href="/auth/register" className="btn-primary text-base px-8 py-4">
                   {t('home.hero.cta')}
-                  <ArrowRight className="w-4 h-4 ml-2" />
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
-                <Link href="/guides" className="btn-secondary px-6 py-3">
+                <Link href="/guides" className="btn-secondary text-base px-8 py-4">
                   {t('nav.guides')}
                 </Link>
               </div>
-            </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto mt-16">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-blue-600 mb-1">
-                    {stat.number}
+              {/* Stats */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                {stats.map((stat, index) => (
+                  <div key={index} className="text-center">
+                    <div className="text-4xl font-bold text-gradient mb-1">
+                      {stat.number}
+                    </div>
+                    <div className="text-sm text-gray-500 font-medium">
+                      {stat.label}
+                    </div>
                   </div>
-                  <div className="text-sm text-gray-500 font-medium">
-                    {stat.label}
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+        <section className="section">
+          <div className="container">
+            <div className="text-center mb-16">
+              <h2 className="mb-4">
                 {language === 'fi' ? 'Mitä tarjoamme' : 'What We Offer'}
               </h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
+              <p className="text-gray-600 max-w-2xl mx-auto text-lg">
                 {language === 'fi'
-                  ? 'Kattavat työkalut ja resurssit onnistuneeseen kotoutumiseen'
-                  : 'Comprehensive tools and resources for successful integration'}
+                  ? 'Kattavat työkalut ja resurssit onnistuneeseen kotoutumiseen Suomessa'
+                  : 'Comprehensive tools and resources for successful integration in Finland'}
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-              {features.map((feature, index) => {
-                const Icon = feature.icon;
-                return (
-                  <Link key={index} href={feature.href} className="card group">
-                    <div className={`w-12 h-12 rounded-xl ${feature.color} flex items-center justify-center mb-4`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
-                      {feature.title}
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      {feature.description}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* How It Works */}
-        <section className="py-16 md:py-20 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-                {language === 'fi' ? 'Kuinka se toimii' : 'How It Works'}
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-              {[
-                { step: '1', title: language === 'fi' ? 'Rekisteröidy' : 'Register', desc: language === 'fi' ? 'Luo ilmainen tili' : 'Create free account' },
-                { step: '2', title: language === 'fi' ? 'Tutustu' : 'Explore', desc: language === 'fi' ? 'Selaa oppaita' : 'Browse guides' },
-                { step: '3', title: language === 'fi' ? 'Luo CV' : 'Create CV', desc: language === 'fi' ? 'Rakenna CV' : 'Build your CV' },
-                { step: '4', title: language === 'fi' ? 'Aloita' : 'Start', desc: language === 'fi' ? 'Uusi elämä' : 'New life' },
-              ].map((item, index) => (
-                <div key={index} className="text-center">
-                  <div className="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center text-lg font-bold mx-auto mb-4">
-                    {item.step}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {features.map((feature, index) => (
+                <Link key={index} href={feature.href} className="feature-card group">
+                  <div className={`icon-box ${feature.iconBg}`}>
+                    <span className="text-2xl">{feature.icon}</span>
                   </div>
-                  <h3 className="font-semibold text-gray-900 mb-1">{item.title}</h3>
-                  <p className="text-sm text-gray-500">{item.desc}</p>
-                </div>
+                  <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                    {feature.title}
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    {feature.description}
+                  </p>
+                </Link>
               ))}
             </div>
           </div>
         </section>
 
+        {/* Benefits Section */}
+        <section className="section section-gray">
+          <div className="container">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <h2 className="mb-6">
+                  {language === 'fi' ? (
+                    <>Miksi valita <span className="text-gradient">Finland Guide</span>?</>
+                  ) : (
+                    <>Why choose <span className="text-gradient">Finland Guide</span>?</>
+                  )}
+                </h2>
+                <p className="text-gray-600 text-lg mb-8">
+                  {language === 'fi'
+                    ? 'Olemme luoneet kattavan alustan, joka auttaa sinua kaikissa kotoutumisen vaiheissa.'
+                    : 'We have created a comprehensive platform that helps you in all stages of integration.'}
+                </p>
+                <ul className="space-y-4">
+                  {benefits.map((benefit, index) => (
+                    <li key={index} className="flex items-center gap-3">
+                      <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                      </div>
+                      <span className="text-gray-700 font-medium">{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="bg-gradient-to-br from-blue-600 to-cyan-500 rounded-3xl p-10 text-white">
+                <h3 className="text-2xl font-bold mb-4">
+                  {language === 'fi' ? 'Aloita ilmaiseksi' : 'Start for Free'}
+                </h3>
+                <p className="text-blue-100 mb-6">
+                  {language === 'fi'
+                    ? 'Rekisteröidy ja saat pääsyn kaikkiin oppaisiin, CV-työkaluun ja palveluhakemistoon.'
+                    : 'Register and get access to all guides, CV tool, and service directory.'}
+                </p>
+                <Link href="/auth/register" className="inline-flex items-center bg-white text-blue-600 px-6 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors">
+                  {t('nav.register')}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* CTA Section */}
-        <section className="py-16 md:py-20">
-          <div className="container mx-auto px-4">
-            <div className="max-w-2xl mx-auto text-center bg-blue-600 text-white rounded-2xl p-8 md:p-12">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+        <section className="section section-dark">
+          <div className="container">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="mb-4">
                 {language === 'fi' ? 'Aloita matkasi tänään' : 'Start Your Journey Today'}
               </h2>
-              <p className="text-blue-100 mb-8">
+              <p className="text-lg text-slate-400 mb-8">
                 {language === 'fi'
-                  ? 'Liity tuhansiin maahanmuuttajiin, jotka ovat löytäneet tiensä Suomessa'
-                  : 'Join thousands of immigrants who found their way in Finland'}
+                  ? 'Liity tuhansiin maahanmuuttajiin, jotka ovat löytäneet tiensä Suomessa.'
+                  : 'Join thousands of immigrants who found their way in Finland.'}
               </p>
-              <Link href="/auth/register" className="inline-flex items-center bg-white text-blue-600 px-6 py-3 rounded-xl font-semibold hover:bg-blue-50 transition-colors">
-                {t('nav.register')}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/auth/register" className="btn-primary text-base px-8 py-4">
+                  {t('nav.register')}
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Link>
+                <Link href="/guides" className="btn-ghost text-white border-2 border-slate-700 hover:border-slate-600 px-8 py-4">
+                  {language === 'fi' ? 'Tutustu oppaisiin' : 'Explore Guides'}
+                </Link>
+              </div>
             </div>
           </div>
         </section>

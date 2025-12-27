@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { guides } from '@/data/guides';
 import Link from 'next/link';
-import { BookOpen, ChevronRight } from 'lucide-react';
+import { ChevronRight, Sparkles } from 'lucide-react';
 
 export default function GuidesPage() {
     const { t, language } = useLanguage();
@@ -25,6 +25,7 @@ export default function GuidesPage() {
                 ? 'Oleskeluluvat, rekisteröinti ja oikeutesi Suomessa'
                 : 'Residence permits, registration, and your rights in Finland',
             icon: '⚖️',
+            iconBg: 'icon-blue',
         },
         {
             id: 'work',
@@ -33,6 +34,7 @@ export default function GuidesPage() {
                 ? 'Työnhaku, haastattelut ja työkulttuurin ymmärtäminen'
                 : 'Job search, interviews, and understanding work culture',
             icon: '💼',
+            iconBg: 'icon-green',
         },
         {
             id: 'education',
@@ -41,93 +43,108 @@ export default function GuidesPage() {
                 ? 'Kielikurssit, koulutusmahdollisuudet ja oppimisresurssit'
                 : 'Language courses, educational opportunities, and learning resources',
             icon: '📚',
+            iconBg: 'icon-purple',
         },
     ];
 
     return (
-        <div className="min-h-screen flex flex-col bg-gray-50">
+        <div className="min-h-screen flex flex-col">
             <Header />
 
-            <main className="flex-grow py-8 md:py-12">
-                <div className="container mx-auto px-4">
-                    {/* Header */}
-                    <div className="mb-10">
-                        <div className="flex items-center gap-2 text-blue-600 text-sm font-medium mb-3">
-                            <BookOpen className="w-4 h-4" />
-                            <span>{language === 'fi' ? 'Oppaat' : 'Guides'}</span>
+            <main className="flex-grow">
+                {/* Hero */}
+                <section className="section bg-gradient-to-b from-slate-50 to-white">
+                    <div className="container">
+                        <div className="max-w-3xl mx-auto text-center">
+                            <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-5 py-2.5 rounded-full text-sm font-semibold mb-6">
+                                <Sparkles className="w-4 h-4" />
+                                {language === 'fi' ? 'Oppaat' : 'Guides'}
+                            </div>
+                            <h1 className="mb-4">
+                                {language === 'fi' ? (
+                                    <>Kaikki mitä tarvitset <span className="text-gradient">kotoutumiseen</span></>
+                                ) : (
+                                    <>Everything you need for <span className="text-gradient">integration</span></>
+                                )}
+                            </h1>
+                            <p className="text-xl text-gray-600">
+                                {language === 'fi'
+                                    ? 'Kattavat oppaat auttavat sinua navigoimaan elämässä Suomessa'
+                                    : 'Comprehensive guides to help you navigate life in Finland'}
+                            </p>
                         </div>
-                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-                            {t('guides.title')}
-                        </h1>
-                        <p className="text-gray-600 max-w-2xl">
-                            {language === 'fi'
-                                ? 'Kattavat oppaat auttavat sinua navigoimaan elämässä Suomessa'
-                                : 'Comprehensive guides to help you navigate life in Finland'}
-                        </p>
                     </div>
+                </section>
 
-                    {/* Categories */}
-                    <div className="space-y-12">
+                {/* Categories */}
+                <section className="section">
+                    <div className="container">
                         {categories.map((category) => {
                             const categoryGuides = groupedGuides[category.id as keyof typeof groupedGuides];
                             if (categoryGuides.length === 0) return null;
 
                             return (
-                                <section key={category.id}>
+                                <div key={category.id} className="mb-16 last:mb-0">
                                     {/* Category Header */}
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <span className="text-2xl">{category.icon}</span>
+                                    <div className="flex items-center gap-4 mb-8">
+                                        <div className={`icon-box ${category.iconBg}`}>
+                                            <span className="text-2xl">{category.icon}</span>
+                                        </div>
                                         <div>
-                                            <h2 className="text-xl font-bold text-gray-900">{category.title}</h2>
-                                            <p className="text-sm text-gray-500">{category.description}</p>
+                                            <h2 className="text-2xl font-bold text-gray-900">{category.title}</h2>
+                                            <p className="text-gray-600">{category.description}</p>
                                         </div>
                                     </div>
 
                                     {/* Guides Grid */}
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {categoryGuides.map((guide) => (
                                             <Link
                                                 key={guide.id}
                                                 href={`/guides/${guide.id}`}
-                                                className="card group flex flex-col"
+                                                className="card group"
                                             >
-                                                <div className="flex items-start gap-3 mb-3">
-                                                    <span className="text-2xl flex-shrink-0">{guide.icon}</span>
+                                                <div className="flex items-start gap-4 mb-4">
+                                                    <span className="text-3xl flex-shrink-0">{guide.icon}</span>
                                                     <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
                                                         {language === 'fi' ? guide.titleFi : guide.title}
                                                     </h3>
                                                 </div>
-                                                <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-2">
+                                                <p className="text-sm text-gray-600 mb-6 line-clamp-2">
                                                     {language === 'fi' ? guide.descriptionFi : guide.description}
                                                 </p>
-                                                <div className="flex items-center text-blue-600 text-sm font-medium">
+                                                <div className="flex items-center text-blue-600 text-sm font-semibold group-hover:gap-2 transition-all">
                                                     {language === 'fi' ? 'Lue opas' : 'Read guide'}
-                                                    <ChevronRight className="w-4 h-4 ml-1" />
+                                                    <ChevronRight className="w-4 h-4" />
                                                 </div>
                                             </Link>
                                         ))}
                                     </div>
-                                </section>
+                                </div>
                             );
                         })}
                     </div>
+                </section>
 
-                    {/* CTA */}
-                    <div className="mt-12 bg-blue-600 text-white rounded-xl p-6 md:p-8 text-center">
-                        <h2 className="text-xl font-bold mb-2">
-                            {language === 'fi' ? 'Tarvitsetko henkilökohtaista apua?' : 'Need Personal Assistance?'}
-                        </h2>
-                        <p className="text-blue-100 mb-4">
-                            {language === 'fi'
-                                ? 'Tutustu paikallisiin maahanmuuttajapalveluihin kaupungissasi'
-                                : 'Explore local immigrant services in your city'}
-                        </p>
-                        <Link href="/services" className="inline-flex items-center bg-white text-blue-600 px-5 py-2.5 rounded-lg font-semibold hover:bg-blue-50 transition-colors">
-                            {language === 'fi' ? 'Selaa palveluita' : 'Browse Services'}
-                            <ChevronRight className="w-4 h-4 ml-1" />
-                        </Link>
+                {/* CTA */}
+                <section className="section section-dark">
+                    <div className="container">
+                        <div className="max-w-2xl mx-auto text-center">
+                            <h2 className="mb-4">
+                                {language === 'fi' ? 'Tarvitsetko henkilökohtaista apua?' : 'Need Personal Assistance?'}
+                            </h2>
+                            <p className="text-slate-400 mb-8">
+                                {language === 'fi'
+                                    ? 'Tutustu paikallisiin maahanmuuttajapalveluihin kaupungissasi'
+                                    : 'Explore local immigrant services in your city'}
+                            </p>
+                            <Link href="/services" className="btn-primary">
+                                {language === 'fi' ? 'Selaa palveluita' : 'Browse Services'}
+                                <ChevronRight className="w-5 h-5 ml-1" />
+                            </Link>
+                        </div>
                     </div>
-                </div>
+                </section>
             </main>
 
             <Footer />

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { CV, emptyCV, Experience, Education, Skill, Language as CVLanguage } from '@/types/cv';
 import { generateCVPDF } from '@/utils/pdfGenerator';
+import { supabase } from '@/lib/supabase';
 import {
     Save,
     Download,
@@ -22,14 +24,117 @@ import {
     FileText,
     CheckCircle,
     ChevronRight,
-    Search
+    Search,
+    Loader2
 } from 'lucide-react';
 
 export default function CVBuilder() {
     const { t, language } = useLanguage();
+    const router = useRouter();
     const [cv, setCV] = useState<CV>(emptyCV);
     const [activeSection, setActiveSection] = useState<string>('personal');
     const [photoPreview, setPhotoPreview] = useState<string>('');
+    const [loading, setLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
+    const [user, setUser] = useState<any>(null);
+
+    useEffect(() => {
+        checkUserAndLoadCV();
+    }, []);
+
+    const checkUserAndLoadCV = async () => {
+        try {
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+
+            if (!authUser) {
+                router.push('/auth/login');
+                return;
+            }
+
+            setUser(authUser);
+
+            // Load existing CV from database
+            const { data: cvData, error } = await supabase
+                .from('cvs')
+                .select('*')
+                .eq('user_id', authUser.id)
+                .single();
+
+            if (cvData && !error) {
+                const loadedCV: CV = {
+                    personalInfo: cvData.personal_info || emptyCV.personalInfo,
+                    summary: cvData.summary || '',
+                    experience: cvData.experience || [],
+                    education: cvData.education || [],
+                    skills: cvData.skills || [],
+                    languages: cvData.languages || [],
+                };
+                setCV(loadedCV);
+
+                // Set photo preview if exists
+                if (loadedCV.personalInfo.photoUrl) {
+                    setPhotoPreview(loadedCV.personalInfo.photoUrl);
+                }
+            }
+        } catch (error) {
+            console.error('Error loading CV:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleSaveCV = async () => {
+        if (!user) {
+            alert(language === 'fi' ? 'Kirjaudu sisään tallentaaksesi CV:n' : 'Please login to save your CV');
+            return;
+        }
+
+        setSaving(true);
+        try {
+            const cvData = {
+                user_id: user.id,
+                personal_info: cv.personalInfo,
+                summary: cv.summary,
+                experience: cv.experience,
+                education: cv.education,
+                skills: cv.skills,
+                languages: cv.languages,
+                photo_url: cv.personalInfo.photoUrl,
+                updated_at: new Date().toISOString(),
+            };
+
+            // Check if CV exists
+            const { data: existing } = await supabase
+                .from('cvs')
+                .select('id')
+                .eq('user_id', user.id)
+                .single();
+
+            if (existing) {
+                // Update existing CV
+                const { error } = await supabase
+                    .from('cvs')
+                    .update(cvData)
+                    .eq('user_id', user.id);
+
+                if (error) throw error;
+            } else {
+                // Insert new CV
+                const { error } = await supabase
+                    .from('cvs')
+                    .insert([cvData]);
+
+                if (error) throw error;
+            }
+
+            alert(language === 'fi' ? 'CV tallennettu onnistuneesti!' : 'CV saved successfully!');
+        } catch (error: any) {
+            console.error('Error saving CV:', error);
+            alert(language === 'fi' ? 'Virhe tallennettaessa CV:tä' : 'Error saving CV');
+        } finally {
+            setSaving(false);
+        }
+    };
 
     const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -218,9 +323,22 @@ export default function CVBuilder() {
 
                                 {/* Actions */}
                                 <div className="mt-6 space-y-2 pt-4 border-t border-gray-100">
-                                    <button className="w-full btn-primary flex items-center justify-center text-sm">
-                                        <Save className="w-4 h-4 mr-2" />
-                                        {t('cv.actions.save')}
+                                    <button
+                                        onClick={handleSaveCV}
+                                        disabled={saving}
+                                        className="w-full btn-primary flex items-center justify-center text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {saving ? (
+                                            <>
+                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                {language === 'fi' ? 'Tallennetaan...' : 'Saving...'}
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Save className="w-4 h-4 mr-2" />
+                                                {t('cv.actions.save')}
+                                            </>
+                                        )}
                                     </button>
                                     <button
                                         onClick={handleDownloadPDF}

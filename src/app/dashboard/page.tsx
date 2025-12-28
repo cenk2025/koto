@@ -21,6 +21,7 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState<any>(null);
     const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [cvData, setCvData] = useState<any>(null);
 
     useEffect(() => {
         checkUser();
@@ -47,6 +48,17 @@ export default function DashboardPage() {
             if (profileData) {
                 setProfile(profileData);
             }
+
+            // Fetch CV
+            const { data: cv } = await supabase
+                .from('cvs')
+                .select('*')
+                .eq('user_id', authUser.id)
+                .single();
+
+            if (cv) {
+                setCvData(cv);
+            }
         } catch (error) {
             console.error('Error fetching user:', error);
         } finally {
@@ -72,7 +84,7 @@ export default function DashboardPage() {
     }
 
     const stats = [
-        { icon: FileText, label: language === 'fi' ? 'CV:t' : 'CVs', value: '0', iconBg: 'icon-blue' },
+        { icon: FileText, label: language === 'fi' ? 'CV:t' : 'CVs', value: cvData ? '1' : '0', iconBg: 'icon-blue' },
         { icon: Bookmark, label: language === 'fi' ? 'Tallennetut' : 'Saved', value: '0', iconBg: 'icon-green' },
         { icon: MapPin, label: language === 'fi' ? 'Palvelut' : 'Services', value: '50+', iconBg: 'icon-purple' },
     ];
@@ -136,25 +148,83 @@ export default function DashboardPage() {
                                         <div className="flex items-center justify-between mb-6">
                                             <h2 className="text-xl font-bold" style={{ color: '#0f172a' }}>{t('dashboard.myCv')}</h2>
                                         </div>
-                                        <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border border-blue-100">
-                                            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
-                                                <FileText className="w-10 h-10 text-blue-600" />
+
+                                        {cvData ? (
+                                            <div className="space-y-4">
+                                                {/* CV Preview */}
+                                                <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-6 border border-blue-100">
+                                                    <div className="flex items-start gap-4">
+                                                        {cvData.photo_url && (
+                                                            <img
+                                                                src={cvData.photo_url}
+                                                                alt="CV Photo"
+                                                                className="w-20 h-20 rounded-xl object-cover border-2 border-white shadow-sm"
+                                                            />
+                                                        )}
+                                                        <div className="flex-1">
+                                                            <h3 className="text-lg font-bold text-gray-900 mb-1">
+                                                                {cvData.personal_info?.firstName} {cvData.personal_info?.lastName}
+                                                            </h3>
+                                                            <p className="text-sm text-gray-600 mb-2">{cvData.personal_info?.email}</p>
+                                                            {cvData.summary && (
+                                                                <p className="text-sm text-gray-700 line-clamp-2">{cvData.summary}</p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* CV Stats */}
+                                                    <div className="grid grid-cols-3 gap-4 mt-4 pt-4 border-t border-blue-200/50">
+                                                        <div className="text-center">
+                                                            <div className="text-2xl font-bold text-blue-600">{cvData.experience?.length || 0}</div>
+                                                            <div className="text-xs text-gray-600">{language === 'fi' ? 'Työkokemus' : 'Experience'}</div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-2xl font-bold text-blue-600">{cvData.education?.length || 0}</div>
+                                                            <div className="text-xs text-gray-600">{language === 'fi' ? 'Koulutus' : 'Education'}</div>
+                                                        </div>
+                                                        <div className="text-center">
+                                                            <div className="text-2xl font-bold text-blue-600">{cvData.skills?.length || 0}</div>
+                                                            <div className="text-xs text-gray-600">{language === 'fi' ? 'Taidot' : 'Skills'}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Actions */}
+                                                <div className="flex gap-3">
+                                                    <Link
+                                                        href="/cv-builder"
+                                                        className="flex-1 btn-primary text-sm py-3 px-4 inline-flex items-center justify-center gap-2"
+                                                    >
+                                                        <Edit className="w-4 h-4" />
+                                                        {language === 'fi' ? 'Muokkaa CV:tä' : 'Edit CV'}
+                                                    </Link>
+                                                    <button className="flex-1 btn-secondary text-sm py-3 px-4 inline-flex items-center justify-center gap-2">
+                                                        <Download className="w-4 h-4" />
+                                                        {language === 'fi' ? 'Lataa PDF' : 'Download PDF'}
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                                                {language === 'fi'
-                                                    ? 'Luo ensimmäinen CV:si'
-                                                    : 'Create your first CV'}
-                                            </h3>
-                                            <p className="text-gray-600 mb-6 max-w-sm mx-auto">
-                                                {language === 'fi'
-                                                    ? 'Rakenna ammattimainen CV minuuteissa AI-avustuksella'
-                                                    : 'Build a professional CV in minutes with AI assistance'}
-                                            </p>
-                                            <Link href="/cv-builder" className="btn-primary text-sm py-3 px-6 inline-flex items-center gap-2">
-                                                <Plus className="w-4 h-4" />
-                                                {language === 'fi' ? 'Aloita nyt' : 'Start now'}
-                                            </Link>
-                                        </div>
+                                        ) : (
+                                            <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border border-blue-100">
+                                                <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                                    <FileText className="w-10 h-10 text-blue-600" />
+                                                </div>
+                                                <h3 className="font-semibold text-lg text-gray-900 mb-2">
+                                                    {language === 'fi'
+                                                        ? 'Luo ensimmäinen CV:si'
+                                                        : 'Create your first CV'}
+                                                </h3>
+                                                <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+                                                    {language === 'fi'
+                                                        ? 'Rakenna ammattimainen CV minuuteissa AI-avustuksella'
+                                                        : 'Build a professional CV in minutes with AI assistance'}
+                                                </p>
+                                                <Link href="/cv-builder" className="btn-primary text-sm py-3 px-6 inline-flex items-center gap-2">
+                                                    <Plus className="w-4 h-4" />
+                                                    {language === 'fi' ? 'Aloita nyt' : 'Start now'}
+                                                </Link>
+                                            </div>
+                                        )}
                                     </div>
 
                                     {/* Saved Services */}

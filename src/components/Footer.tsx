@@ -2,7 +2,7 @@
 
 import { useLanguage } from '@/contexts/LanguageContext';
 import Link from 'next/link';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 
 export default function Footer() {
     const { t, language } = useLanguage();
@@ -96,19 +96,13 @@ export default function Footer() {
                                 <div className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <Mail className="w-4 h-4" />
                                 </div>
-                                <span>info@finlandguide.fi</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-slate-400 text-sm">
-                                <div className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <Phone className="w-4 h-4" />
-                                </div>
-                                <span>+358 40 123 4567</span>
+                                <span>info@voon.fi</span>
                             </li>
                             <li className="flex items-center gap-3 text-slate-400 text-sm">
                                 <div className="w-9 h-9 bg-slate-800 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <MapPin className="w-4 h-4" />
                                 </div>
-                                <span>Helsinki, Finland</span>
+                                <span>Jyväskylä, Finland</span>
                             </li>
                         </ul>
                     </div>
@@ -117,7 +111,7 @@ export default function Footer() {
                 {/* Bottom */}
                 <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
                     <p className="text-slate-500 text-sm">
-                        © {new Date().getFullYear()} Finland Guide. {language === 'fi' ? 'Kaikki oikeudet pidätetään.' : 'All rights reserved.'}
+                        © {new Date().getFullYear()} Finland Guide - {language === 'fi' ? 'VoonIQ:n tuote' : 'A VoonIQ Product'}. {language === 'fi' ? 'Kaikki oikeudet pidätetään.' : 'All rights reserved.'}
                     </p>
                     <div className="flex gap-6">
                         {links.company.map((link) => (

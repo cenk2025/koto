@@ -98,27 +98,41 @@ export default function GuidesPage() {
 
                                     {/* Guides Grid */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                        {categoryGuides.map((guide) => (
-                                            <Link
-                                                key={guide.id}
-                                                href={`/guides/${guide.id}`}
-                                                className="card group"
-                                            >
-                                                <div className="flex items-start gap-4 mb-4">
-                                                    <span className="text-3xl flex-shrink-0">{guide.icon}</span>
-                                                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
-                                                        {language === 'fi' ? guide.titleFi : guide.title}
-                                                    </h3>
-                                                </div>
-                                                <p className="text-sm text-gray-600 mb-6 line-clamp-2">
-                                                    {language === 'fi' ? guide.descriptionFi : guide.description}
-                                                </p>
-                                                <div className="flex items-center text-blue-600 text-sm font-semibold group-hover:gap-2 transition-all">
-                                                    {language === 'fi' ? 'Lue opas' : 'Read guide'}
-                                                    <ChevronRight className="w-4 h-4" />
-                                                </div>
-                                            </Link>
-                                        ))}
+                                        {categoryGuides.map((guide) => {
+                                            // Extract first paragraph from content for preview
+                                            const content = language === 'fi' ? guide.contentFi : guide.content;
+                                            const firstParagraph = content
+                                                .split('\n\n')
+                                                .find(p => p.trim() && !p.startsWith('#'))
+                                                ?.replace(/^[-*]\s/gm, '')
+                                                .trim() || '';
+                                            const preview = firstParagraph.slice(0, 200) + (firstParagraph.length > 200 ? '...' : '');
+
+                                            return (
+                                                <Link
+                                                    key={guide.id}
+                                                    href={`/guides/${guide.id}`}
+                                                    className="card group"
+                                                >
+                                                    <div className="flex items-start gap-4 mb-4">
+                                                        <span className="text-3xl flex-shrink-0">{guide.icon}</span>
+                                                        <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                                                            {language === 'fi' ? guide.titleFi : guide.title}
+                                                        </h3>
+                                                    </div>
+                                                    <p className="text-sm font-medium text-gray-700 mb-3">
+                                                        {language === 'fi' ? guide.descriptionFi : guide.description}
+                                                    </p>
+                                                    <p className="text-sm text-gray-600 mb-6 line-clamp-3 leading-relaxed">
+                                                        {preview}
+                                                    </p>
+                                                    <div className="flex items-center text-blue-600 text-sm font-semibold group-hover:gap-2 transition-all">
+                                                        {language === 'fi' ? 'Lue opas' : 'Read guide'}
+                                                        <ChevronRight className="w-4 h-4" />
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             );

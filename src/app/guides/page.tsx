@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { guides } from '@/data/guides';
 import Link from 'next/link';
-import { ChevronRight, Sparkles } from 'lucide-react';
+import { ChevronRight, Sparkles, Scale, Briefcase, GraduationCap } from 'lucide-react';
 
 export default function GuidesPage() {
     const { t, language } = useLanguage();
@@ -24,7 +24,7 @@ export default function GuidesPage() {
             description: language === 'fi'
                 ? 'Oleskeluluvat, rekisteröinti ja oikeutesi Suomessa'
                 : 'Residence permits, registration, and your rights in Finland',
-            icon: '⚖️',
+            icon: Scale,
             iconBg: 'icon-blue',
         },
         {
@@ -33,7 +33,7 @@ export default function GuidesPage() {
             description: language === 'fi'
                 ? 'Työnhaku, haastattelut ja työkulttuurin ymmärtäminen'
                 : 'Job search, interviews, and understanding work culture',
-            icon: '💼',
+            icon: Briefcase,
             iconBg: 'icon-green',
         },
         {
@@ -42,7 +42,7 @@ export default function GuidesPage() {
             description: language === 'fi'
                 ? 'Kielikurssit, koulutusmahdollisuudet ja oppimisresurssit'
                 : 'Language courses, educational opportunities, and learning resources',
-            icon: '📚',
+            icon: GraduationCap,
             iconBg: 'icon-purple',
         },
     ];
@@ -83,15 +83,17 @@ export default function GuidesPage() {
                             const categoryGuides = groupedGuides[category.id as keyof typeof groupedGuides];
                             if (categoryGuides.length === 0) return null;
 
+                            const IconComponent = category.icon;
+
                             return (
                                 <div key={category.id} className="mb-16 last:mb-0">
                                     {/* Category Header - Centered */}
                                     <div className="text-center mb-10">
-                                        <div className={`icon-box ${category.iconBg} mx-auto mb-4`}>
-                                            <span className="text-2xl">{category.icon}</span>
+                                        <div className={`icon-box ${category.iconBg} mx-auto mb-5`}>
+                                            <IconComponent className="w-7 h-7" />
                                         </div>
-                                        <h2 className="text-2xl font-bold text-gray-900 mb-2">{category.title}</h2>
-                                        <p className="text-gray-600 max-w-xl mx-auto">{category.description}</p>
+                                        <h2 className="text-3xl font-bold text-gray-900 mb-3">{category.title}</h2>
+                                        <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">{category.description}</p>
                                     </div>
 
                                     {/* Guides Grid */}

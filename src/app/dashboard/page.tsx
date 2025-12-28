@@ -136,16 +136,23 @@ export default function DashboardPage() {
                                         <div className="flex items-center justify-between mb-6">
                                             <h2 className="text-xl font-bold" style={{ color: '#0f172a' }}>{t('dashboard.myCv')}</h2>
                                         </div>
-                                        <div className="text-center py-8 bg-gray-50 rounded-2xl">
-                                            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                                            <p className="text-gray-500 mb-4">
+                                        <div className="text-center py-12 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl border border-blue-100">
+                                            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                                <FileText className="w-10 h-10 text-blue-600" />
+                                            </div>
+                                            <h3 className="font-semibold text-lg text-gray-900 mb-2">
                                                 {language === 'fi'
-                                                    ? 'Et ole vielä luonut CV:tä'
-                                                    : 'You haven\'t created a CV yet'}
+                                                    ? 'Luo ensimmäinen CV:si'
+                                                    : 'Create your first CV'}
+                                            </h3>
+                                            <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+                                                {language === 'fi'
+                                                    ? 'Rakenna ammattimainen CV minuuteissa AI-avustuksella'
+                                                    : 'Build a professional CV in minutes with AI assistance'}
                                             </p>
-                                            <Link href="/cv-builder" className="btn-primary text-sm py-2.5 px-5">
-                                                <Plus className="w-4 h-4 mr-2" />
-                                                {language === 'fi' ? 'Luo CV' : 'Create CV'}
+                                            <Link href="/cv-builder" className="btn-primary text-sm py-3 px-6 inline-flex items-center gap-2">
+                                                <Plus className="w-4 h-4" />
+                                                {language === 'fi' ? 'Aloita nyt' : 'Start now'}
                                             </Link>
                                         </div>
                                     </div>
@@ -159,14 +166,22 @@ export default function DashboardPage() {
                                                 <ChevronRight className="w-4 h-4" />
                                             </Link>
                                         </div>
-                                        <div className="text-center py-8 bg-gray-50 rounded-xl">
-                                            <MapPin className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                                            <p className="text-gray-500 mb-4">
+                                        <div className="text-center py-12 bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-100">
+                                            <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                                <MapPin className="w-10 h-10 text-green-600" />
+                                            </div>
+                                            <h3 className="font-semibold text-lg text-gray-900 mb-2">
                                                 {language === 'fi'
-                                                    ? 'Et ole vielä tallentanut palveluita'
-                                                    : 'You haven\'t saved any services yet'}
+                                                    ? 'Ei tallennettuja palveluita'
+                                                    : 'No saved services'}
+                                            </h3>
+                                            <p className="text-gray-600 mb-6 max-w-sm mx-auto">
+                                                {language === 'fi'
+                                                    ? 'Löydä ja tallenna sinulle hyödyllisiä paikallisia palveluita'
+                                                    : 'Find and save local services that are useful for you'}
                                             </p>
-                                            <Link href="/services" className="btn-primary text-sm py-2.5 px-5">
+                                            <Link href="/services" className="btn-primary text-sm py-3 px-6 inline-flex items-center gap-2">
+                                                <MapPin className="w-4 h-4" />
                                                 {language === 'fi' ? 'Etsi palveluita' : 'Find services'}
                                             </Link>
                                         </div>

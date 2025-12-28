@@ -54,22 +54,29 @@ h5,
 h6 {
   font-weight: 700;
   line-height: 1.2;
+  color: var(--gray-900);
 }
 
 h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 h2 {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.875rem, 4vw, 2.75rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 h3 {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
 }
 
 p {
   line-height: 1.7;
+  color: var(--gray-600);
 }
 
 /* Gradient Text */
@@ -149,32 +156,34 @@ p {
 /* Card - Clean with Icon Top */
 .card {
   background: white;
-  border-radius: 1.5rem;
+  border-radius: 1rem;
   padding: 2rem;
   border: 1px solid var(--gray-100);
   transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .card:hover {
   border-color: var(--gray-200);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
-  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 /* Feature Card with Centered Icon */
 .feature-card {
   background: white;
-  border-radius: 1.5rem;
-  padding: 2.5rem 2rem;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
   border: 1px solid var(--gray-100);
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .feature-card:hover {
   border-color: var(--primary);
-  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.1);
-  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(37, 99, 235, 0.12);
+  transform: translateY(-6px);
 }
 
 .feature-card .icon-box {
@@ -188,34 +197,35 @@ p {
   font-size: 1.5rem;
 }
 
+/* Icon colors with better contrast */
 .icon-blue {
   background: #dbeafe;
-  color: #2563eb;
+  color: #1d4ed8;
 }
 
 .icon-green {
   background: #dcfce7;
-  color: #16a34a;
+  color: #15803d;
 }
 
 .icon-purple {
   background: #f3e8ff;
-  color: #9333ea;
+  color: #7c3aed;
 }
 
 .icon-orange {
   background: #ffedd5;
-  color: #ea580c;
+  color: #c2410c;
 }
 
 .icon-cyan {
   background: #cffafe;
-  color: #0891b2;
+  color: #0e7490;
 }
 
 .icon-pink {
   background: #fce7f3;
-  color: #db2777;
+  color: #be185d;
 }
 
 /* Input - Clean */

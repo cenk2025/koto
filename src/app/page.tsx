@@ -4,35 +4,35 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { FileText, Briefcase, MapPin, Shield, ArrowRight, CheckCircle, Sparkles } from 'lucide-react';
+import { FileText, Briefcase, MapPin, Shield, ArrowRight, CheckCircle, Sparkles, Scale, GraduationCap } from 'lucide-react';
 
 export default function Home() {
   const { t, language } = useLanguage();
 
   const features = [
     {
-      icon: '⚖️',
+      icon: Scale,
       title: t('features.legal.title'),
       description: t('features.legal.desc'),
       href: '/guides?category=legal',
       iconBg: 'icon-blue',
     },
     {
-      icon: '💼',
+      icon: Briefcase,
       title: t('features.work.title'),
       description: t('features.work.desc'),
       href: '/guides?category=work',
       iconBg: 'icon-green',
     },
     {
-      icon: '📝',
+      icon: FileText,
       title: t('features.cv.title'),
       description: t('features.cv.desc'),
       href: '/cv-builder',
       iconBg: 'icon-purple',
     },
     {
-      icon: '📍',
+      icon: MapPin,
       title: t('features.services.title'),
       description: t('features.services.desc'),
       href: '/services',
@@ -126,19 +126,22 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {features.map((feature, index) => (
-                <Link key={index} href={feature.href} className="feature-card group">
-                  <div className={`icon-box ${feature.iconBg}`}>
-                    <span className="text-2xl">{feature.icon}</span>
-                  </div>
-                  <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors text-center">
-                    {feature.title}
-                  </h3>
-                  <p className="text-sm text-gray-600 text-center">
-                    {feature.description}
-                  </p>
-                </Link>
-              ))}
+              {features.map((feature, index) => {
+                const IconComponent = feature.icon;
+                return (
+                  <Link key={index} href={feature.href} className="feature-card group">
+                    <div className={`icon-box ${feature.iconBg}`}>
+                      <IconComponent className="w-7 h-7" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors text-center">
+                      {feature.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 text-center leading-relaxed">
+                      {feature.description}
+                    </p>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </section>
